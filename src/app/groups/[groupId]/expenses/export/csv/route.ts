@@ -67,6 +67,8 @@ export async function GET(
           conversionRate: true,
           paidById: true,
           paidFor: { select: { participantId: true, shares: true } },
+          paidByList: { select: { participantId: true, shares: true } },
+          paidBySplitMode: true,
           isReimbursement: true,
           splitMode: true,
         },
@@ -126,6 +128,16 @@ export async function GET(
 
   const expenses = group.expenses.map((expense) => {
     const shares = getExpenseShares(expense)
+    // Legacy expenses without paidByList rows were paid in full by paidById.
+    const paidAmounts =
+      expense.paidByList.length > 0
+        ? getExpenseShares({
+            id: expense.id,
+            amount: expense.amount,
+            splitMode: expense.paidBySplitMode,
+            paidFor: expense.paidByList,
+          })
+        : new Map([[expense.paidById, expense.amount]])
 
     return {
       date: formatDate(expense.expenseDate),
@@ -147,18 +159,15 @@ export async function GET(
       splitMode: splitModeLabel[expense.splitMode],
       ...Object.fromEntries(
         group.participants.map((participant) => {
-          const isPaidByParticipant = expense.paidById === participant.id
-          // The same apportionment the balances tab uses, so a participant's
-          // column here matches what they are actually charged: whole minor
-          // units, honouring the split mode, adding up to the expense amount.
-          const participantAmountShare = +formatAmountAsDecimal(
-            shares.get(participant.id) ?? 0,
-            currency,
-          )
+          // The same apportionment the balances tab uses, on both the payer
+          // and the paid-for side, so a participant's column is their net
+          // effect on the balances: what they paid minus what they owe.
+          const paidAmount = paidAmounts.get(participant.id) ?? 0
+          const owedAmount = shares.get(participant.id) ?? 0
 
           return [
             participant.name,
-            participantAmountShare * (isPaidByParticipant ? 1 : -1),
+            +formatAmountAsDecimal(paidAmount - owedAmount, currency),
           ]
         }),
       ),

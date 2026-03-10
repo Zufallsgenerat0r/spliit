@@ -19,10 +19,33 @@ export function getBalances(
   const balances: Balances = {}
 
   for (const expense of expenses) {
-    const paidBy = expense.paidBy.id
+    const paidByList = expense.paidByList ?? []
 
-    if (!balances[paidBy]) balances[paidBy] = { paid: 0, paidFor: 0, total: 0 }
-    balances[paidBy].paid += expense.amount
+    // Distribute paid amounts across payers using paidBySplitMode, with the
+    // same apportionment as the paidFor side so each credit is a whole minor
+    // unit and the credits add up to exactly the expense amount.
+    if (paidByList.length > 0) {
+      const paidAmounts = getExpenseShares({
+        id: expense.id,
+        amount: expense.amount,
+        splitMode: expense.paidBySplitMode ?? 'BY_AMOUNT',
+        paidFor: paidByList.map(({ participant, shares }) => ({
+          participantId: participant.id,
+          shares,
+        })),
+      })
+      paidAmounts.forEach((paidAmount, payerId) => {
+        if (!balances[payerId])
+          balances[payerId] = { paid: 0, paidFor: 0, total: 0 }
+        balances[payerId].paid += paidAmount
+      })
+    } else {
+      // Fallback for expenses without paidByList (legacy)
+      const paidBy = expense.paidBy.id
+      if (!balances[paidBy])
+        balances[paidBy] = { paid: 0, paidFor: 0, total: 0 }
+      balances[paidBy].paid += expense.amount
+    }
 
     const dividedAmounts = getExpenseShares({
       id: expense.id,

@@ -100,7 +100,52 @@ export const expenseFormSchema = z
     paidBy: z.string({
       error: (issue) =>
         issue.input === undefined ? 'paidByRequired' : undefined,
-    }),
+    }), // Single payer ID (used when isMultiPayer is false)
+    isMultiPayer: z.boolean().default(false),
+    paidByList: z
+      .array(
+        z.object({
+          participant: z.string().max(64),
+          shares: z.union([
+            z.number(),
+            z.string().transform((value, ctx) => {
+              const normalizedValue = value.replace(/,/g, '.')
+              const valueAsNumber = Number(normalizedValue)
+              if (Number.isNaN(valueAsNumber))
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: 'invalidNumber',
+                })
+              return value
+            }),
+          ]),
+        }),
+      )
+      .max(100)
+      .superRefine((paidByList, ctx) => {
+        for (const { shares } of paidByList) {
+          const shareNumber = Number(shares)
+          if (shareNumber <= 0) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'noZeroShares',
+            })
+          }
+        }
+        const seen = new Set<string>()
+        for (let i = 0; i < paidByList.length; i++) {
+          if (seen.has(paidByList[i].participant)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'duplicateParticipant',
+              path: [i, 'participant'],
+            })
+          }
+          seen.add(paidByList[i].participant)
+        }
+      })
+      .default([]),
+    paidBySplitMode: z.enum(SplitMode).default('BY_AMOUNT'),
     paidFor: z
       .array(
         z.object({
@@ -152,6 +197,7 @@ export const expenseFormSchema = z
     recurrenceRule: z.enum(RecurrenceRule).default('NONE'),
   })
   .superRefine((expense, ctx) => {
+    // Validate paidFor split
     switch (expense.splitMode) {
       case 'EVENLY':
         break // noop
@@ -198,6 +244,48 @@ export const expenseFormSchema = z
         break
       }
     }
+
+    // Validate paidByList split (only when multi-payer is active)
+    if (expense.isMultiPayer && expense.paidByList.length > 0) {
+      switch (expense.paidBySplitMode) {
+        case 'EVENLY':
+          break
+        case 'BY_SHARES':
+          break
+        case 'BY_AMOUNT': {
+          const sum = expense.paidByList.reduce(
+            (sum, { shares }) => new Decimal(shares).add(sum),
+            new Decimal(0),
+          )
+          if (!sum.equals(new Decimal(expense.amount))) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'paidByAmountSum',
+              path: ['paidByList'],
+            })
+          }
+          break
+        }
+        case 'BY_PERCENTAGE': {
+          const sum = expense.paidByList.reduce(
+            (sum, { shares }) =>
+              sum +
+              (typeof shares === 'string'
+                ? Math.round(Number(shares) * 100)
+                : Number(shares)),
+            0,
+          )
+          if (sum !== 10000) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'paidByPercentageSum',
+              path: ['paidByList'],
+            })
+          }
+          break
+        }
+      }
+    }
   })
   .transform((expense) => {
     // Format the share split as a number (if from form submission)
@@ -218,6 +306,22 @@ export const expenseFormSchema = z
           shares: Number(shares),
         }
       }),
+      paidByList: expense.paidByList.map((paidBy) => {
+        const shares = paidBy.shares
+        if (
+          typeof shares === 'string' &&
+          expense.paidBySplitMode !== 'BY_AMOUNT'
+        ) {
+          return {
+            ...paidBy,
+            shares: Math.round(Number(shares) * 100),
+          }
+        }
+        return {
+          ...paidBy,
+          shares: Number(shares),
+        }
+      }),
     }
   })
 
@@ -230,4 +334,6 @@ export type SplittingOptions = {
   // Used for saving default splitting options in localStorage
   splitMode: SplitMode
   paidFor: ExpenseFormValues['paidFor'] | null
+  paidBySplitMode?: SplitMode
+  paidByList?: ExpenseFormValues['paidByList'] | null
 }
