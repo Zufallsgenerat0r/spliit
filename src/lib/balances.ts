@@ -19,18 +19,52 @@ export function getBalances(
   const balances: Balances = {}
 
   for (const expense of expenses) {
-    const paidBy = expense.paidBy.id
     const paidFors = expense.paidFor
+    const paidByList = expense.paidByList ?? []
 
-    if (!balances[paidBy]) balances[paidBy] = { paid: 0, paidFor: 0, total: 0 }
-    balances[paidBy].paid += expense.amount
+    // Distribute paid amounts across payers using paidBySplitMode
+    if (paidByList.length > 0) {
+      const totalPaidByShares = paidByList.reduce(
+        (sum: number, p: any) => sum + p.shares,
+        0,
+      )
+      let paidRemaining = expense.amount
+      paidByList.forEach((paidByEntry: any, index: number) => {
+        const payerId = paidByEntry.participant.id
+        if (!balances[payerId])
+          balances[payerId] = { paid: 0, paidFor: 0, total: 0 }
 
+        const isLast = index === paidByList.length - 1
+        const paidBySplitMode = expense.paidBySplitMode ?? 'BY_AMOUNT'
+
+        const [shares, totalShares] = match(paidBySplitMode)
+          .with('EVENLY', () => [1, paidByList.length])
+          .with('BY_SHARES', () => [paidByEntry.shares, totalPaidByShares])
+          .with('BY_PERCENTAGE', () => [paidByEntry.shares, totalPaidByShares])
+          .with('BY_AMOUNT', () => [paidByEntry.shares, totalPaidByShares])
+          .exhaustive()
+
+        const paidAmount = isLast
+          ? paidRemaining
+          : (expense.amount * shares) / totalShares
+        paidRemaining -= paidAmount
+        balances[payerId].paid += paidAmount
+      })
+    } else {
+      // Fallback for expenses without paidByList (legacy)
+      const paidBy = expense.paidBy.id
+      if (!balances[paidBy])
+        balances[paidBy] = { paid: 0, paidFor: 0, total: 0 }
+      balances[paidBy].paid += expense.amount
+    }
+
+    // Distribute owed amounts across payees using splitMode
     const totalPaidForShares = paidFors.reduce(
-      (sum, paidFor) => sum + paidFor.shares,
+      (sum: number, paidFor: any) => sum + paidFor.shares,
       0,
     )
     let remaining = expense.amount
-    paidFors.forEach((paidFor, index) => {
+    paidFors.forEach((paidFor: any, index: number) => {
       if (!balances[paidFor.participant.id])
         balances[paidFor.participant.id] = { paid: 0, paidFor: 0, total: 0 }
 

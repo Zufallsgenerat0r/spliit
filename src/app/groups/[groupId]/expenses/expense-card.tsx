@@ -22,7 +22,6 @@ function Participants({
   participantCount: number
 }) {
   const t = useTranslations('ExpenseCard')
-  const key = expense.amount > 0 ? 'paidBy' : 'receivedBy'
   const paidFor =
     expense.paidFor.length == participantCount && participantCount >= 4 ? (
       <strong>{t('everyone')}</strong>
@@ -35,6 +34,27 @@ function Participants({
       ))
     )
 
+  const paidByList = (expense as any).paidByList as
+    | { participant: { id: string; name: string }; shares: number }[]
+    | undefined
+  const isMultiPayer = paidByList && paidByList.length > 1
+
+  if (isMultiPayer) {
+    const paidByNames = paidByList.map((pb, index) => (
+      <Fragment key={index}>
+        {index !== 0 && <>, </>}
+        <strong>{pb.participant.name}</strong>
+      </Fragment>
+    ))
+    const participants = t.rich('paidByMultiple', {
+      strong: (chunks) => <strong>{chunks}</strong>,
+      paidByNames: () => <>{paidByNames}</>,
+      paidFor: () => paidFor,
+    })
+    return <>{participants}</>
+  }
+
+  const key = expense.amount > 0 ? 'paidBy' : 'receivedBy'
   const participants = t.rich(key, {
     strong: (chunks) => <strong>{chunks}</strong>,
     paidBy: expense.paidBy.name,

@@ -44,6 +44,7 @@ export async function createExpense(
   for (const participant of [
     expenseFormValues.paidBy,
     ...expenseFormValues.paidFor.map((p) => p.participant),
+    ...expenseFormValues.paidByList.map((p) => p.participant),
   ]) {
     if (!group.participants.some((p) => p.id === participant))
       throw new Error(`Invalid participant ID: ${participant}`)
@@ -64,6 +65,20 @@ export async function createExpense(
     groupId,
   )
 
+  // Build paidByList data
+  const paidByListData =
+    expenseFormValues.isMultiPayer && expenseFormValues.paidByList.length > 0
+      ? expenseFormValues.paidByList.map((p) => ({
+          participantId: p.participant,
+          shares: p.shares,
+        }))
+      : [
+          {
+            participantId: expenseFormValues.paidBy,
+            shares: expenseFormValues.amount,
+          },
+        ]
+
   return prisma.expense.create({
     data: {
       id: expenseId,
@@ -77,6 +92,11 @@ export async function createExpense(
       title: expenseFormValues.title,
       paidById: expenseFormValues.paidBy,
       splitMode: expenseFormValues.splitMode,
+      paidBySplitMode:
+        expenseFormValues.isMultiPayer &&
+        expenseFormValues.paidByList.length > 0
+          ? expenseFormValues.paidBySplitMode
+          : 'BY_AMOUNT',
       recurrenceRule: expenseFormValues.recurrenceRule,
       recurringExpenseLink: {
         ...(isCreateRecurrence
@@ -91,6 +111,11 @@ export async function createExpense(
             participantId: paidFor.participant,
             shares: paidFor.shares,
           })),
+        },
+      },
+      paidByList: {
+        createMany: {
+          data: paidByListData,
         },
       },
       isReimbursement: expenseFormValues.isReimbursement,
@@ -134,6 +159,7 @@ export async function getGroupExpensesParticipants(groupId: string) {
       expenses.flatMap((e) => [
         e.paidBy.id,
         ...e.paidFor.map((pf) => pf.participant.id),
+        ...e.paidByList.map((pb) => pb.participant.id),
       ]),
     ),
   )
@@ -166,6 +192,7 @@ export async function updateExpense(
   for (const participant of [
     expenseFormValues.paidBy,
     ...expenseFormValues.paidFor.map((p) => p.participant),
+    ...expenseFormValues.paidByList.map((p) => p.participant),
   ]) {
     if (!group.participants.some((p) => p.id === participant))
       throw new Error(`Invalid participant ID: ${participant}`)
@@ -216,7 +243,55 @@ export async function updateExpense(
       categoryId: expenseFormValues.category,
       paidById: expenseFormValues.paidBy,
       splitMode: expenseFormValues.splitMode,
+      paidBySplitMode:
+        expenseFormValues.isMultiPayer &&
+        expenseFormValues.paidByList.length > 0
+          ? expenseFormValues.paidBySplitMode
+          : 'BY_AMOUNT',
       recurrenceRule: expenseFormValues.recurrenceRule,
+      paidByList: (() => {
+        const newPaidByList =
+          expenseFormValues.isMultiPayer &&
+          expenseFormValues.paidByList.length > 0
+            ? expenseFormValues.paidByList.map((p) => ({
+                participantId: p.participant,
+                shares: p.shares,
+              }))
+            : [
+                {
+                  participantId: expenseFormValues.paidBy,
+                  shares: expenseFormValues.amount,
+                },
+              ]
+        const existingPaidByList = existingExpense.paidByList ?? []
+        return {
+          create: newPaidByList.filter(
+            (p) =>
+              !existingPaidByList.some(
+                (ep: any) => ep.participantId === p.participantId,
+              ),
+          ),
+          update: newPaidByList
+            .filter((p) =>
+              existingPaidByList.some(
+                (ep: any) => ep.participantId === p.participantId,
+              ),
+            )
+            .map((p) => ({
+              where: {
+                expenseId_participantId: {
+                  expenseId,
+                  participantId: p.participantId,
+                },
+              },
+              data: { shares: p.shares },
+            })),
+          deleteMany: existingPaidByList.filter(
+            (ep: any) =>
+              !newPaidByList.some((p) => p.participantId === ep.participantId),
+          ),
+        }
+      })(),
       paidFor: {
         create: expenseFormValues.paidFor
           .filter(
@@ -358,6 +433,13 @@ export async function getGroupExpenses(
           shares: true,
         },
       },
+      paidByList: {
+        select: {
+          participant: { select: { id: true, name: true } },
+          shares: true,
+        },
+      },
+      paidBySplitMode: true,
       splitMode: true,
       recurrenceRule: true,
       title: true,
@@ -385,6 +467,7 @@ export async function getExpense(groupId: string, expenseId: string) {
     include: {
       paidBy: true,
       paidFor: true,
+      paidByList: { include: { participant: true } },
       category: true,
       documents: true,
       recurringExpenseLink: true,
@@ -463,6 +546,7 @@ async function createRecurringExpenses() {
           include: {
             paidBy: true,
             paidFor: true,
+            paidByList: true,
             category: true,
             documents: true,
           },
@@ -489,6 +573,7 @@ async function createRecurringExpenses() {
         category,
         paidBy,
         paidFor,
+        paidByList,
         documents,
         ...destructeredCurrentExpenseRecord
       } = currentExpenseRecord
@@ -508,6 +593,16 @@ async function createRecurringExpenses() {
                     participantId: paidFor.participantId,
                     shares: paidFor.shares,
                   })),
+                },
+              },
+              paidByList: {
+                createMany: {
+                  data: currentExpenseRecord.paidByList.map(
+                    (paidByEntry: any) => ({
+                      participantId: paidByEntry.participantId,
+                      shares: paidByEntry.shares,
+                    }),
+                  ),
                 },
               },
               documents: {
@@ -530,6 +625,7 @@ async function createRecurringExpenses() {
             // Ensure that the same information is available on the returned record that was created
             include: {
               paidFor: true,
+              paidByList: true,
               documents: true,
               category: true,
               paidBy: true,

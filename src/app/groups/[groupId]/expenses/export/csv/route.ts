@@ -45,6 +45,8 @@ export async function GET(
           conversionRate: true,
           paidById: true,
           paidFor: { select: { participantId: true, shares: true } },
+          paidByList: { select: { participantId: true, shares: true } },
+          paidBySplitMode: true,
           isReimbursement: true,
           splitMode: true,
         },
@@ -122,6 +124,7 @@ export async function GET(
     splitMode: splitModeLabel[expense.splitMode],
     ...Object.fromEntries(
       group.participants.map((participant) => {
+        // Calculate how much this participant owes (paidFor share)
         const { totalShares, participantShare } = expense.paidFor.reduce(
           (acc, { participantId, shares }) => {
             acc.totalShares += shares
@@ -133,16 +136,41 @@ export async function GET(
           { totalShares: 0, participantShare: 0 },
         )
 
-        const isPaidByParticipant = expense.paidById === participant.id
-        const participantAmountShare = +formatAmountAsDecimal(
+        // Calculate how much this participant paid (paidByList share)
+        const paidByList = (expense as any).paidByList as
+          | { participantId: string; shares: number }[]
+          | undefined
+        const paidBySplitMode =
+          ((expense as any).paidBySplitMode as string) ?? 'BY_AMOUNT'
+        let paidAmount = 0
+        if (paidByList && paidByList.length > 0) {
+          const paidByEntry = paidByList.find(
+            (p) => p.participantId === participant.id,
+          )
+          if (paidByEntry) {
+            const totalPaidByShares = paidByList.reduce(
+              (sum, p) => sum + p.shares,
+              0,
+            )
+            if (paidBySplitMode === 'EVENLY') {
+              paidAmount = expense.amount / paidByList.length
+            } else {
+              paidAmount =
+                (expense.amount * paidByEntry.shares) / totalPaidByShares
+            }
+          }
+        } else {
+          // Legacy: single payer
+          paidAmount = expense.paidById === participant.id ? expense.amount : 0
+        }
+
+        const owedAmount = +formatAmountAsDecimal(
           (expense.amount / totalShares) * participantShare,
           currency,
         )
+        const paidFormatted = +formatAmountAsDecimal(paidAmount, currency)
 
-        return [
-          participant.name,
-          participantAmountShare * (isPaidByParticipant ? 1 : -1),
-        ]
+        return [participant.name, paidFormatted - owedAmount]
       }),
     ),
   }))

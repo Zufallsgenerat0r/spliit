@@ -14,13 +14,50 @@ export function getTotalActiveUserPaidFor(
   activeUserId: string | null,
   expenses: NonNullable<Awaited<ReturnType<typeof getGroupExpenses>>>,
 ): number {
-  return expenses.reduce(
-    (total, expense) =>
-      expense.paidBy.id === activeUserId && !expense.isReimbursement
-        ? total + expense.amount
-        : total,
-    0,
+  return expenses.reduce((total, expense) => {
+    if (expense.isReimbursement) return total
+
+    const paidByList = (expense as any).paidByList
+    if (paidByList && paidByList.length > 0) {
+      return total + calculatePaidByShare(activeUserId, expense as any)
+    }
+
+    // Legacy fallback: single payer
+    return expense.paidBy.id === activeUserId
+      ? total + expense.amount
+      : total
+  }, 0)
+}
+
+export function calculatePaidByShare(
+  participantId: string | null,
+  expense: {
+    amount: number
+    paidByList: { participant: { id: string }; shares: number }[]
+    paidBySplitMode: string
+  },
+): number {
+  const paidByList = expense.paidByList
+  const userPaidBy = paidByList.find(
+    (p) => p.participant.id === participantId,
   )
+
+  if (!userPaidBy) return 0
+
+  const totalShares = paidByList.reduce((sum, p) => sum + p.shares, 0)
+
+  switch (expense.paidBySplitMode) {
+    case 'EVENLY':
+      return expense.amount / paidByList.length
+    case 'BY_AMOUNT':
+      return userPaidBy.shares
+    case 'BY_PERCENTAGE':
+      return (expense.amount * userPaidBy.shares) / totalShares
+    case 'BY_SHARES':
+      return (expense.amount * userPaidBy.shares) / totalShares
+    default:
+      return 0
+  }
 }
 
 type Expense = NonNullable<Awaited<ReturnType<typeof getGroupExpenses>>>[number]
