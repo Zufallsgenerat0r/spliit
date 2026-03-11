@@ -239,7 +239,9 @@ export function ExpenseForm({
               : undefined,
           ],
           isReimbursement: true,
-          splitMode: defaultSplittingOptions.splitMode,
+          // Mark as paid reimbursements should always be split evenly
+          // independent of any stored default splitting options.
+          splitMode: 'EVENLY',
           isMultiPayer: false,
           paidByList: [],
           paidBySplitMode: 'BY_AMOUNT' as const,
