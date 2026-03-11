@@ -65,6 +65,14 @@ export async function createExpense(
     groupId,
   )
 
+  const paidFor =
+    expenseFormValues.splitMode === 'EVENLY'
+      ? expenseFormValues.paidFor.map(({ participant }) => ({
+          participant,
+          shares: 1,
+        }))
+      : expenseFormValues.paidFor
+
   // Build paidByList data
   const paidByListData =
     expenseFormValues.isMultiPayer && expenseFormValues.paidByList.length > 0
@@ -107,7 +115,7 @@ export async function createExpense(
       },
       paidFor: {
         createMany: {
-          data: expenseFormValues.paidFor.map((paidFor) => ({
+          data: paidFor.map((paidFor) => ({
             participantId: paidFor.participant,
             shares: paidFor.shares,
           })),
@@ -231,6 +239,14 @@ export async function updateExpense(
     existingExpense.expenseDate,
   )
 
+  const paidFor =
+    expenseFormValues.splitMode === 'EVENLY'
+      ? expenseFormValues.paidFor.map(({ participant }) => ({
+          participant,
+          shares: 1,
+        }))
+      : expenseFormValues.paidFor
+
   return prisma.expense.update({
     where: { id: expenseId },
     data: {
@@ -293,7 +309,7 @@ export async function updateExpense(
         }
       })(),
       paidFor: {
-        create: expenseFormValues.paidFor
+        create: paidFor
           .filter(
             (p) =>
               !existingExpense.paidFor.some(
@@ -304,7 +320,7 @@ export async function updateExpense(
             participantId: paidFor.participant,
             shares: paidFor.shares,
           })),
-        update: expenseFormValues.paidFor.map((paidFor) => ({
+        update: paidFor.map((paidFor) => ({
           where: {
             expenseId_participantId: {
               expenseId,
