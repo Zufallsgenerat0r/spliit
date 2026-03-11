@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "<strong>{paidBy}</strong> 为 <paidFor></paidFor> 支付。",
+    "paidByMultiple": "由 <paidByNames></paidByNames> 为 <paidFor></paidFor> 支付",
     "receivedBy": "<strong>{paidBy}</strong> 为 <paidFor></paidFor> 接收。",
     "yourBalance": "你的余额：",
     "everyone": "所有人",
@@ -229,6 +230,15 @@
     "saving": "保存中……",
     "cancel": "取消",
     "reimbursement": "报销",
+    "multiPayer": "多个付款人",
+    "multiPayerToggle": "将付款分摊给多个参与者",
+    "paidByCard": {
+      "title": "付款人",
+      "description": "选择谁支付了这笔费用以及如何分摊付款。"
+    },
+    "PaidBySplitModeField": {
+      "label": "付款人分摊模式"
+    },
     "originalAmountField": {
       "label": "需要转换的金额"
     },
@@ -356,7 +366,9 @@
     "noZeroShares": "所有份额必须大于0。",
     "amountSum": "金额之和必须等于消费的金额。",
     "percentageSum": "百分比之和必须等于100。",
-    "ratePositive": "汇率必须为正数（大于0）。"
+    "ratePositive": "汇率必须为正数（大于0）。",
+    "paidByAmountSum": "付款人金额之和必须等于费用金额。",
+    "paidByPercentageSum": "付款人百分比之和必须等于100。"
   },
   "Categories": {
     "search": "搜寻类别……",

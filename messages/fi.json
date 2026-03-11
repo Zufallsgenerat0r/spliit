@@ -42,6 +42,7 @@
   },
   "ExpenseCard": {
     "paidBy": "<strong>{paidBy}</strong> maksoi {forCount, plural, =1 {henkilön} other {henkilöiden}} <paidFor></paidFor> puolesta",
+    "paidByMultiple": "Maksajat <paidByNames></paidByNames>, kohde <paidFor></paidFor>",
     "receivedBy": "<strong>{paidBy}</strong> sai rahaa {forCount, plural, =1 {henkilön} other {henkilöiden}} <paidFor></paidFor> puolesta",
     "yourBalance": "Saldosi:"
   },
@@ -205,7 +206,16 @@
     "save": "Tallenna",
     "saving": "Tallennetaan…",
     "cancel": "Peruuta",
-    "reimbursement": "Velanmaksu"
+    "reimbursement": "Velanmaksu",
+    "multiPayer": "Useita maksajia",
+    "multiPayerToggle": "Jaa maksu useiden osallistujien kesken",
+    "paidByCard": {
+      "title": "Maksaja",
+      "description": "Valitse kuka maksoi tämän kulun ja miten maksu jaetaan."
+    },
+    "PaidBySplitModeField": {
+      "label": "Maksajan jakotapa"
+    }
   },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
@@ -306,7 +316,9 @@
     "paidForMin1": "Valitse vähintään yksi osallistuja.",
     "noZeroShares": "Jokaisen osuuden täytyy olla suurempi kuin 0.",
     "amountSum": "Osuuksien summan täytyy vastata kulun summaa.",
-    "percentageSum": "Prosenttiosuuksien summan täytyy olla 100."
+    "percentageSum": "Prosenttiosuuksien summan täytyy olla 100.",
+    "paidByAmountSum": "Maksajien summien on vastattava kulun kokonaismäärää.",
+    "paidByPercentageSum": "Maksajien prosenttien summan on oltava 100."
   },
   "Categories": {
     "search": "Etsi kategoriaa...",

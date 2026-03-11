@@ -42,6 +42,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Plătit de <strong>{paidBy}</strong> pentru <paidFor></paidFor>",
+    "paidByMultiple": "Plătit de <paidByNames></paidByNames> pentru <paidFor></paidFor>",
     "receivedBy": "Primit de <strong>{paidBy}</strong> pentru <paidFor></paidFor>",
     "yourBalance": "Soldul tău:"
   },
@@ -205,7 +206,16 @@
     "save": "Salvează",
     "saving": "Se salvează…",
     "cancel": "Anulează",
-    "reimbursement": "Rambursare"
+    "reimbursement": "Rambursare",
+    "multiPayer": "Mai mulți plătitori",
+    "multiPayerToggle": "Împarte plata între mai mulți participanți",
+    "paidByCard": {
+      "title": "Plătit de",
+      "description": "Selectează cine a plătit această cheltuială și cum să împarți plata."
+    },
+    "PaidBySplitModeField": {
+      "label": "Modul de împărțire a plătitorului"
+    }
   },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
@@ -316,7 +326,9 @@
     "paidForMin1": "Cheltuiala trebuie plătită pentru cel puțin un membru.",
     "noZeroShares": "Toate părțile trebuie să fie mai mari de 0.",
     "amountSum": "Suma valorilor trebuie să fie egală cu suma cheltuielilor.",
-    "percentageSum": "Suma procentajelor trebuie să fie egală cu 100."
+    "percentageSum": "Suma procentajelor trebuie să fie egală cu 100.",
+    "paidByAmountSum": "Suma sumelor plătitorilor trebuie să fie egală cu suma cheltuielii.",
+    "paidByPercentageSum": "Suma procentelor plătitorilor trebuie să fie egală cu 100."
   },
   "Categories": {
     "search": "Căutați categorie…",

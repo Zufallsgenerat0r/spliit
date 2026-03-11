@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "<strong>{paidBy}</strong>が<paidFor></paidFor>のために支払いました",
+    "paidByMultiple": "<paidByNames></paidByNames>が<paidFor></paidFor>のために支払い",
     "receivedBy": "<strong>{paidBy}</strong>が<paidFor></paidFor>のために受け取りました",
     "yourBalance": "あなたの残高:",
     "everyone": "全員",
@@ -232,6 +233,15 @@
     "saving": "保存中…",
     "cancel": "キャンセル",
     "reimbursement": "払い戻し",
+    "multiPayer": "複数の支払者",
+    "multiPayerToggle": "支払いを複数の参加者で分割する",
+    "paidByCard": {
+      "title": "支払者",
+      "description": "この支出を誰が支払い、どのように分割するかを選択してください。"
+    },
+    "PaidBySplitModeField": {
+      "label": "支払者の分割モード"
+    },
     "conversionUnavailable": "支出ごとに異なる通貨を設定して金額を換算するには、グループの通貨をカスタム以外の通貨に設定してください。",
     "originalAmountField": {
       "label": "換算する金額"
@@ -364,6 +374,8 @@
     "noZeroShares": "すべてのシェアは0より大きくなければなりません。",
     "amountSum": "金額の合計は支出金額と一致する必要があります。",
     "percentageSum": "パーセンテージの合計は100である必要があります。",
+    "paidByAmountSum": "支払者の金額の合計は支出金額と一致する必要があります。",
+    "paidByPercentageSum": "支払者の割合の合計は100になる必要があります。",
     "ratePositive": "レートは必ずゼロより大きくなければなりません。"
   },
   "Categories": {

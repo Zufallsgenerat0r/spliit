@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Pago por <strong>{paidBy}</strong> para <paidFor></paidFor>",
+    "paidByMultiple": "Pago por <paidByNames></paidByNames> para <paidFor></paidFor>",
     "receivedBy": "Recebido por <strong>{paidBy}</strong> para <paidFor></paidFor>",
     "yourBalance": "Seu saldo:",
     "everyone": "Todos",
@@ -224,6 +225,15 @@
     "saving": "Salvando…",
     "cancel": "Cancelar",
     "reimbursement": "Reembolso",
+    "multiPayer": "Múltiplos pagadores",
+    "multiPayerToggle": "Dividir o pagamento entre múltiplos participantes",
+    "paidByCard": {
+      "title": "Pago por",
+      "description": "Selecione quem pagou esta despesa e como dividir o pagamento."
+    },
+    "PaidBySplitModeField": {
+      "label": "Modo de divisão do pagador"
+    },
     "conversionRateField": {
       "label": "Taxa de câmbio"
     },
@@ -342,7 +352,9 @@
     "paidForMin1": "A despesa deve ser paga para pelo menos um participante.",
     "noZeroShares": "Todas as partes devem ser maiores que 0.",
     "amountSum": "A soma dos valores deve ser igual ao valor da despesa.",
-    "percentageSum": "A soma das porcentagens deve ser igual a 100."
+    "percentageSum": "A soma das porcentagens deve ser igual a 100.",
+    "paidByAmountSum": "A soma dos valores dos pagadores deve ser igual ao valor da despesa.",
+    "paidByPercentageSum": "A soma das porcentagens dos pagadores deve ser igual a 100."
   },
   "Categories": {
     "search": "Pesquisar categoria...",

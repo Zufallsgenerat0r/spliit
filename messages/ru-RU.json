@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Потратил <strong>{paidBy}</strong> за <paidFor></paidFor>",
+    "paidByMultiple": "Оплачено <paidByNames></paidByNames> за <paidFor></paidFor>",
     "receivedBy": "Получил <strong>{paidBy}</strong> за <paidFor></paidFor>",
     "yourBalance": "Изменение баланса участника:"
   },
@@ -206,7 +207,16 @@
     "save": "Сохранить",
     "saving": "Сохранение…",
     "cancel": "Отмена",
-    "reimbursement": "Возмещение"
+    "reimbursement": "Возмещение",
+    "multiPayer": "Несколько плательщиков",
+    "multiPayerToggle": "Разделить платёж между несколькими участниками",
+    "paidByCard": {
+      "title": "Оплачено",
+      "description": "Выберите, кто оплатил этот расход и как разделить платёж."
+    },
+    "PaidBySplitModeField": {
+      "label": "Режим разделения плательщика"
+    }
   },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
@@ -317,7 +327,9 @@
     "paidForMin1": "За этот расход должен заплатить как минимум один участник.",
     "noZeroShares": "Все доли должны быть больше 0.",
     "amountSum": "Сумма расхода должна быть равна сумме значений, распределенных между участниками.",
-    "percentageSum": "Сумма процентов должна быть равна 100."
+    "percentageSum": "Сумма процентов должна быть равна 100.",
+    "paidByAmountSum": "Сумма сумм плательщиков должна быть равна сумме расхода.",
+    "paidByPercentageSum": "Сумма процентов плательщиков должна быть равна 100."
   },
   "Categories": {
     "search": "Поиск категорий...",

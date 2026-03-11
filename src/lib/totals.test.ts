@@ -1,11 +1,11 @@
-import {
-  getTotalActiveUserPaidFor,
-  getTotalGroupSpending,
-  calculateShare,
-  calculatePaidByShare,
-  getTotalActiveUserShare,
-} from './totals'
 import { alice, bob, charlie, makeExpense } from './test-helpers'
+import {
+  calculatePaidByShare,
+  calculateShare,
+  getTotalActiveUserPaidFor,
+  getTotalActiveUserShare,
+  getTotalGroupSpending,
+} from './totals'
 
 // ─── getTotalGroupSpending ───────────────────────────────────────────
 

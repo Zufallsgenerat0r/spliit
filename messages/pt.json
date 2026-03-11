@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Pago por <strong>{paidBy}</strong> para <paidFor></paidFor>",
+    "paidByMultiple": "Pago por <paidByNames></paidByNames> para <paidFor></paidFor>",
     "everyone": "todos",
     "receivedBy": "Recebido por <strong>{paidBy}</strong> para <paidFor></paidFor>",
     "yourBalance": "O teu saldo:",
@@ -123,5 +124,20 @@
       },
       "save": "Gravar"
     }
+  },
+  "ExpenseForm": {
+    "multiPayer": "Múltiplos pagadores",
+    "multiPayerToggle": "Dividir o pagamento entre múltiplos participantes",
+    "paidByCard": {
+      "title": "Pago por",
+      "description": "Selecione quem pagou esta despesa e como dividir o pagamento."
+    },
+    "PaidBySplitModeField": {
+      "label": "Modo de divisão do pagador"
+    }
+  },
+  "SchemaErrors": {
+    "paidByAmountSum": "A soma dos montantes dos pagadores deve ser igual ao montante da despesa.",
+    "paidByPercentageSum": "A soma das percentagens dos pagadores deve ser igual a 100."
   }
 }

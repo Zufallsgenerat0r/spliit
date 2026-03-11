@@ -42,6 +42,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Сплачено <strong>{paidBy}</strong> за <paidFor></paidFor>",
+    "paidByMultiple": "Сплачено <paidByNames></paidByNames> за <paidFor></paidFor>",
     "receivedBy": "Отримано <strong>{paidBy}</strong> за <paidFor></paidFor>",
     "yourBalance": "Ваш баланс:"
   },
@@ -205,7 +206,16 @@
     "save": "Зберегти",
     "saving": "Збереження..",
     "cancel": "Скасувати",
-    "reimbursement": "Відшкодування"
+    "reimbursement": "Відшкодування",
+    "multiPayer": "Кілька платників",
+    "multiPayerToggle": "Розділити платіж між кількома учасниками",
+    "paidByCard": {
+      "title": "Сплачено",
+      "description": "Виберіть, хто оплатив цю витрату і як розділити платіж."
+    },
+    "PaidBySplitModeField": {
+      "label": "Режим розділення платника"
+    }
   },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
@@ -316,7 +326,9 @@
     "paidForMin1": "Витрата повинна бути сплачена принаймні для одного учасника",
     "noZeroShares": "Усі частки повинні бути більшими за 0",
     "amountSum": "Сума повинна відповідати витраті",
-    "percentageSum": "Сума відсотків повинна дорівнювати 100"
+    "percentageSum": "Сума відсотків повинна дорівнювати 100",
+    "paidByAmountSum": "Сума сум платників повинна дорівнювати сумі витрати.",
+    "paidByPercentageSum": "Сума відсотків платників повинна дорівнювати 100."
   },
   "Categories": {
     "search": "Шукати категорію..",

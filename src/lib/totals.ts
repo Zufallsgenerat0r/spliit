@@ -23,9 +23,7 @@ export function getTotalActiveUserPaidFor(
     }
 
     // Legacy fallback: single payer
-    return expense.paidBy.id === activeUserId
-      ? total + expense.amount
-      : total
+    return expense.paidBy.id === activeUserId ? total + expense.amount : total
   }, 0)
 }
 
@@ -38,9 +36,7 @@ export function calculatePaidByShare(
   },
 ): number {
   const paidByList = expense.paidByList
-  const userPaidBy = paidByList.find(
-    (p) => p.participant.id === participantId,
-  )
+  const userPaidBy = paidByList.find((p) => p.participant.id === participantId)
 
   if (!userPaidBy) return 0
 

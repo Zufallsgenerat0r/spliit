@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Dibayar oleh <strong>{paidBy}</strong> untuk <paidFor></paidFor>",
+    "paidByMultiple": "Dibayar oleh <paidByNames></paidByNames> untuk <paidFor></paidFor>",
     "everyone": "semua orang",
     "receivedBy": "Diterima oleh <strong>{paidBy}</strong> untuk <paidFor></paidFor>",
     "yourBalance": "Saldo Anda:",
@@ -252,7 +253,16 @@
     "save": "Simpan",
     "saving": "Menyimpan…",
     "cancel": "Batalkan",
-    "reimbursement": "Reimburse"
+    "reimbursement": "Reimburse",
+    "multiPayer": "Beberapa pembayar",
+    "multiPayerToggle": "Bagi pembayaran antara beberapa peserta",
+    "paidByCard": {
+      "title": "Dibayar oleh",
+      "description": "Pilih siapa yang membayar pengeluaran ini dan cara membagi pembayaran."
+    },
+    "PaidBySplitModeField": {
+      "label": "Mode pembagian pembayar"
+    }
   },
   "Currencies": {
     "custom": {
@@ -377,7 +387,9 @@
     "paidForMin1": "Pengeluaran harus dibayarkan untuk setidaknya satu peserta.",
     "noZeroShares": "Semua porsi harus lebih tinggi dari 0.",
     "amountSum": "Total harus sama dengan jumlah pengeluaran.",
-    "percentageSum": "Total persentase harus sama dengan 100."
+    "percentageSum": "Total persentase harus sama dengan 100.",
+    "paidByAmountSum": "Jumlah nominal pembayar harus sama dengan jumlah pengeluaran.",
+    "paidByPercentageSum": "Jumlah persentase pembayar harus sama dengan 100."
   },
   "Categories": {
     "search": "Cari kategori...",

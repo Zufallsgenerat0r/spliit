@@ -184,7 +184,16 @@
       }
     },
     "reimbursement": "정산",
-    "cancel": "취소"
+    "cancel": "취소",
+    "multiPayer": "다중 결제자",
+    "multiPayerToggle": "여러 참가자 간에 결제를 분할",
+    "paidByCard": {
+      "title": "결제자",
+      "description": "이 지출을 누가 결제했는지와 결제 분할 방법을 선택하세요."
+    },
+    "PaidBySplitModeField": {
+      "label": "결제자 분할 모드"
+    }
   },
   "Balances": {
     "title": "잔액",
@@ -238,6 +247,8 @@
     "noZeroShares": "각 몫은 0보다 커야 합니다.",
     "amountSum": "금액 합계가 지출 금액과 같아야 해요.",
     "percentageSum": "퍼센트 합이 100이 되어야 합니다.",
+    "paidByAmountSum": "결제자 금액의 합계는 지출 금액과 같아야 합니다.",
+    "paidByPercentageSum": "결제자 비율의 합계는 100이어야 합니다.",
     "min1": "최소 한 글자 이상 입력해 주세요.",
     "min2": "최소 두 글자 이상 입력해 주세요.",
     "titleRequired": "제목을 입력해 주세요."
@@ -335,6 +346,7 @@
   },
   "ExpenseCard": {
     "paidBy": "<strong>{paidBy}</strong>가 <paidFor></paidFor>를 위해 결제함",
+    "paidByMultiple": "<paidByNames></paidByNames>이(가) <paidFor></paidFor>을(를) 위해 결제",
     "everyone": "모두",
     "yourBalance": "내 잔액:",
     "notInvolved": "당신은 관련이 없어요"
