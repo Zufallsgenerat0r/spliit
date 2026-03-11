@@ -202,6 +202,15 @@ export function ExpenseForm({
               : (shares / 100).toString()) as any, // Convert to string to ensure consistent handling
           })),
           splitMode: expense.splitMode,
+          isMultiPayer: ((expense as any).paidByList?.length ?? 0) > 1,
+          paidByList: ((expense as any).paidByList ?? []).map((p: any) => ({
+            participant: p.participantId,
+            shares:
+              (expense as any).paidBySplitMode === 'BY_AMOUNT'
+                ? amountAsDecimal(p.shares, groupCurrency)
+                : p.shares / 100,
+          })),
+          paidBySplitMode: (expense as any).paidBySplitMode ?? 'BY_AMOUNT',
           saveDefaultSplittingOptions: false,
           isReimbursement: expense.isReimbursement,
           documents: expense.documents,
@@ -231,6 +240,9 @@ export function ExpenseForm({
           ],
           isReimbursement: true,
           splitMode: defaultSplittingOptions.splitMode,
+          isMultiPayer: false,
+          paidByList: [],
+          paidBySplitMode: 'BY_AMOUNT' as const,
           saveDefaultSplittingOptions: false,
           documents: [],
           notes: '',
@@ -253,6 +265,9 @@ export function ExpenseForm({
           paidBy: getSelectedPayer(),
           isReimbursement: false,
           splitMode: defaultSplittingOptions.splitMode,
+          isMultiPayer: false,
+          paidByList: [],
+          paidBySplitMode: 'BY_AMOUNT' as const,
           saveDefaultSplittingOptions: false,
           documents: searchParams.get('imageUrl')
             ? [
@@ -283,6 +298,15 @@ export function ExpenseForm({
           ? amountAsMinorUnits(shares, groupCurrency)
           : shares,
     }))
+    if (values.isMultiPayer && values.paidByList.length > 0) {
+      values.paidByList = values.paidByList.map(({ participant, shares }) => ({
+        participant,
+        shares:
+          values.paidBySplitMode === 'BY_AMOUNT'
+            ? amountAsMinorUnits(shares, groupCurrency)
+            : shares,
+      }))
+    }
 
     // Currency should be blank if same as group currency
     if (!conversionRequired) {
@@ -732,26 +756,72 @@ export function ExpenseForm({
               render={({ field }) => (
                 <FormItem className="sm:order-5">
                   <FormLabel>{t(`${sExpense}.paidByField.label`)}</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={getSelectedPayer(field)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t(`${sExpense}.paidByField.placeholder`)}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {group.participants.map(({ id, name }) => (
-                        <SelectItem key={id} value={id}>
-                          {name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    {t(`${sExpense}.paidByField.description`)}
-                  </FormDescription>
+                  {!form.watch('isMultiPayer') && (
+                    <>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={getSelectedPayer(field)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={t(
+                              `${sExpense}.paidByField.placeholder`,
+                            )}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {group.participants.map(({ id, name }) => (
+                            <SelectItem key={id} value={id}>
+                              {name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        {t(`${sExpense}.paidByField.description`)}
+                      </FormDescription>
+                    </>
+                  )}
+                  {!form.watch('isReimbursement') && (
+                    <FormField
+                      control={form.control}
+                      name="isMultiPayer"
+                      render={({ field: multiPayerField }) => (
+                        <FormItem className="flex flex-row gap-2 items-center space-y-0 pt-2">
+                          <FormControl>
+                            <Checkbox
+                              checked={multiPayerField.value}
+                              onCheckedChange={(checked) => {
+                                multiPayerField.onChange(checked)
+                                if (checked) {
+                                  // Initialize paidByList with current payer
+                                  const currentPayer = form.getValues('paidBy')
+                                  if (
+                                    currentPayer &&
+                                    form.getValues('paidByList').length === 0
+                                  ) {
+                                    form.setValue('paidByList', [
+                                      {
+                                        participant: currentPayer,
+                                        shares: 1,
+                                      },
+                                    ])
+                                    form.setValue(
+                                      'paidBySplitMode',
+                                      'BY_AMOUNT',
+                                    )
+                                  }
+                                }
+                              }}
+                            />
+                          </FormControl>
+                          <div>
+                            <FormLabel>{t('multiPayerToggle')}</FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -807,6 +877,247 @@ export function ExpenseForm({
             />
           </CardContent>
         </Card>
+
+        {form.watch('isMultiPayer') && (
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle className="flex justify-between">
+                <span>{t('paidByCard.title')}</span>
+                <Button
+                  variant="link"
+                  type="button"
+                  className="-my-2 -mx-4"
+                  onClick={() => {
+                    const paidByList = form.getValues().paidByList
+                    const allSelected =
+                      paidByList.length === group.participants.length
+                    const newPaidByList = allSelected
+                      ? []
+                      : group.participants.map((p) => ({
+                          participant: p.id,
+                          shares:
+                            paidByList.find((pb) => pb.participant === p.id)
+                              ?.shares ?? 1,
+                        }))
+                    form.setValue('paidByList', newPaidByList, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: true,
+                    })
+                  }}
+                >
+                  {form.getValues().paidByList.length ===
+                  group.participants.length ? (
+                    <>{t('selectNone')}</>
+                  ) : (
+                    <>{t('selectAll')}</>
+                  )}
+                </Button>
+              </CardTitle>
+              <CardDescription>{t('paidByCard.description')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name="paidByList"
+                render={() => (
+                  <FormItem className="space-y-0">
+                    {group.participants.map(({ id, name }) => (
+                      <FormField
+                        key={id}
+                        control={form.control}
+                        name="paidByList"
+                        render={({ field }) => {
+                          return (
+                            <div className="flex flex-wrap gap-y-4 items-center border-t last-of-type:border-b last-of-type:!mb-4 -mx-6 px-6 py-3">
+                              <FormItem className="flex-1 flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.some(
+                                      ({ participant }) => participant === id,
+                                    )}
+                                    onCheckedChange={(checked) => {
+                                      const options = {
+                                        shouldDirty: true,
+                                        shouldTouch: true,
+                                        shouldValidate: true,
+                                      }
+                                      checked
+                                        ? form.setValue(
+                                            'paidByList',
+                                            [
+                                              ...field.value,
+                                              {
+                                                participant: id,
+                                                shares: 1,
+                                              },
+                                            ],
+                                            options,
+                                          )
+                                        : form.setValue(
+                                            'paidByList',
+                                            field.value?.filter(
+                                              (value) =>
+                                                value.participant !== id,
+                                            ),
+                                            options,
+                                          )
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="text-sm font-normal flex-1">
+                                  {name}
+                                </FormLabel>
+                              </FormItem>
+                              <div className="flex">
+                                {form.getValues().paidBySplitMode !==
+                                  'EVENLY' && (
+                                  <div>
+                                    <div className="flex gap-1 items-center">
+                                      {form.getValues().paidBySplitMode ===
+                                        'BY_AMOUNT' && (
+                                        <span
+                                          className={cn('text-sm', {
+                                            'text-muted': !field.value?.some(
+                                              ({ participant }) =>
+                                                participant === id,
+                                            ),
+                                          })}
+                                        >
+                                          {group.currency}
+                                        </span>
+                                      )}
+                                      <Input
+                                        key={String(
+                                          !field.value?.some(
+                                            ({ participant }) =>
+                                              participant === id,
+                                          ),
+                                        )}
+                                        className="text-base w-[80px] -my-2"
+                                        type="text"
+                                        disabled={
+                                          !field.value?.some(
+                                            ({ participant }) =>
+                                              participant === id,
+                                          )
+                                        }
+                                        value={
+                                          field.value?.find(
+                                            ({ participant }) =>
+                                              participant === id,
+                                          )?.shares
+                                        }
+                                        onChange={(event) => {
+                                          field.onChange(
+                                            field.value.map((p) =>
+                                              p.participant === id
+                                                ? {
+                                                    participant: id,
+                                                    shares:
+                                                      enforceCurrencyPattern(
+                                                        event.target.value,
+                                                      ),
+                                                  }
+                                                : p,
+                                            ),
+                                          )
+                                        }}
+                                        inputMode={
+                                          form.getValues().paidBySplitMode ===
+                                          'BY_AMOUNT'
+                                            ? 'decimal'
+                                            : 'numeric'
+                                        }
+                                        step={
+                                          form.getValues().paidBySplitMode ===
+                                          'BY_AMOUNT'
+                                            ? 10 **
+                                              -groupCurrency.decimal_digits
+                                            : 1
+                                        }
+                                      />
+                                      {['BY_SHARES', 'BY_PERCENTAGE'].includes(
+                                        form.getValues().paidBySplitMode,
+                                      ) && (
+                                        <span
+                                          className={cn('text-sm', {
+                                            'text-muted': !field.value?.some(
+                                              ({ participant }) =>
+                                                participant === id,
+                                            ),
+                                          })}
+                                        >
+                                          {match(
+                                            form.getValues().paidBySplitMode,
+                                          )
+                                            .with('BY_SHARES', () => (
+                                              <>{t('shares')}</>
+                                            ))
+                                            .with('BY_PERCENTAGE', () => <>%</>)
+                                            .otherwise(() => (
+                                              <></>
+                                            ))}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        }}
+                      />
+                    ))}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="mt-4">
+                <FormField
+                  control={form.control}
+                  name="paidBySplitMode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('PaidBySplitModeField.label')}</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) => {
+                            form.setValue('paidBySplitMode', value as any, {
+                              shouldDirty: true,
+                              shouldTouch: true,
+                              shouldValidate: true,
+                            })
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="EVENLY">
+                              {t('SplitModeField.evenly')}
+                            </SelectItem>
+                            <SelectItem value="BY_SHARES">
+                              {t('SplitModeField.byShares')}
+                            </SelectItem>
+                            <SelectItem value="BY_PERCENTAGE">
+                              {t('SplitModeField.byPercentage')}
+                            </SelectItem>
+                            <SelectItem value="BY_AMOUNT">
+                              {t('SplitModeField.byAmount')}
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="mt-4">
           <CardHeader>

@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "<strong>{paidBy}</strong>-k ordaindua <paidFor></paidFor>-rentzat",
+    "paidByMultiple": "Ordaindua <paidByNames></paidByNames>(e)k <paidFor></paidFor>(e)ntzat",
     "everyone": "denak",
     "receivedBy": "<strong>{paidBy}</strong>-k jasota <paidFor></paidFor>-rentzat",
     "yourBalance": "Zure saldoa:",
@@ -252,7 +253,16 @@
     "save": "Gorde",
     "saving": "Gordetzen…",
     "cancel": "Utzi",
-    "reimbursement": "Diru-itzultzea"
+    "reimbursement": "Diru-itzultzea",
+    "multiPayer": "Ordaintzaile anitzak",
+    "multiPayerToggle": "Banatu ordainketa parte-hartzaile anitzen artean",
+    "paidByCard": {
+      "title": "Ordaindua",
+      "description": "Aukeratu nork ordaindu duen gastu hau eta nola banatu ordainketa."
+    },
+    "PaidBySplitModeField": {
+      "label": "Ordaintzailearen banaketa modua"
+    }
   },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
@@ -364,7 +374,9 @@
     "paidForMin1": "Gastua gutxienez kide batek ordaindu behar du.",
     "noZeroShares": "Parte guztiek zero baino handiagoak izan behar dute.",
     "amountSum": "Zenbatekoen baturak gastuaren zenbatekoa berdindu behar du.",
-    "percentageSum": "Ehunekoen baturak 100 izan behar du."
+    "percentageSum": "Ehunekoen baturak 100 izan behar du.",
+    "paidByAmountSum": "Ordaintzaileen kopuruen baturak gastuaren zenbatekoaren berdina izan behar du.",
+    "paidByPercentageSum": "Ordaintzaileen ehunekoen baturak 100 izan behar du."
   },
   "Categories": {
     "search": "Bilatu kategoria...",

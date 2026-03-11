@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "שולם על ידי <strong>{paidBy}</strong> עבור <paidFor></paidFor>",
+    "paidByMultiple": "שולם על ידי <paidByNames></paidByNames> עבור <paidFor></paidFor>",
     "everyone": "כולם",
     "receivedBy": "התקבל על ידי <strong>{paidBy}</strong> עבור <paidFor></paidFor>",
     "yourBalance": "היתרה שלך:",
@@ -252,7 +253,16 @@
     "save": "שמור",
     "saving": "שומר…",
     "cancel": "ביטול",
-    "reimbursement": "החזר"
+    "reimbursement": "החזר",
+    "multiPayer": "משלמים מרובים",
+    "multiPayerToggle": "חלק את התשלום בין מספר משתתפים",
+    "paidByCard": {
+      "title": "שולם על ידי",
+      "description": "בחר מי שילם על הוצאה זו וכיצד לחלק את התשלום."
+    },
+    "PaidBySplitModeField": {
+      "label": "מצב חלוקת משלם"
+    }
   },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
@@ -364,7 +374,9 @@
     "paidForMin1": "ההוצאה חייבת להיות משולמת עבור לפחות משתתף אחד.",
     "noZeroShares": "כל חלקי ההשתתפות חייבים להיות גבוהים מ-0.",
     "amountSum": "סיכום הסכומים חייב להיות שווה לסכום ההוצאה.",
-    "percentageSum": "סיכום האחוזים חייב להיות שווה ל-100."
+    "percentageSum": "סיכום האחוזים חייב להיות שווה ל-100.",
+    "paidByAmountSum": "סכום סכומי המשלמים חייב להיות שווה לסכום ההוצאה.",
+    "paidByPercentageSum": "סכום אחוזי המשלמים חייב להיות שווה ל-100."
   },
   "Categories": {
     "search": "חפש קטגוריה...",

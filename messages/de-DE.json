@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Gezahlt von <strong>{paidBy}</strong> für <paidFor></paidFor>",
+    "paidByMultiple": "Bezahlt von <paidByNames></paidByNames> für <paidFor></paidFor>",
     "receivedBy": "Empfangen von <strong>{paidBy}</strong> für <paidFor></paidFor>",
     "yourBalance": "Deine Bilanz:",
     "everyone": "jeder",
@@ -260,6 +261,15 @@
       "useCustom": "Benutze individuelle Rate",
       "label": "Wechselkurs",
       "useApi": "Benutze Zinssätze von Frankfurter"
+    },
+    "multiPayer": "Mehrere Zahler",
+    "multiPayerToggle": "Zahlung auf mehrere Teilnehmer aufteilen",
+    "paidByCard": {
+      "title": "Bezahlt von",
+      "description": "Wähle aus, wer diese Ausgabe bezahlt hat und wie die Zahlung aufgeteilt werden soll."
+    },
+    "PaidBySplitModeField": {
+      "label": "Zahlungsaufteilungsmodus"
     }
   },
   "ExpenseDocumentsInput": {
@@ -372,7 +382,9 @@
     "noZeroShares": "Alle Anteile müssen größer als 0 sein.",
     "amountSum": "Die Summe der Beträge muss dem Betrag der Ausgabe entsprechen.",
     "percentageSum": "Die Summe der prozentualen Anteile muss 100 ergeben.",
-    "ratePositive": "Der Zinssatz muss unbedingt größer als Null sein."
+    "ratePositive": "Der Zinssatz muss unbedingt größer als Null sein.",
+    "paidByAmountSum": "Die Summe der Zahlerbeträge muss dem Ausgabenbetrag entsprechen.",
+    "paidByPercentageSum": "Die Summe der Zahlerprozentsätze muss 100 ergeben."
   },
   "Categories": {
     "search": "Nach Kategorie suchen...",

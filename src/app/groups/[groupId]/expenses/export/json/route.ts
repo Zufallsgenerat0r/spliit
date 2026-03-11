@@ -26,6 +26,8 @@ export async function GET(
           conversionRate: true,
           paidById: true,
           paidFor: { select: { participantId: true, shares: true } },
+          paidByList: { select: { participantId: true, shares: true } },
+          paidBySplitMode: true,
           isReimbursement: true,
           splitMode: true,
           recurrenceRule: true,

@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Pagato da <strong>{paidBy}</strong> per <paidFor></paidFor>",
+    "paidByMultiple": "Pagato da <paidByNames></paidByNames> per <paidFor></paidFor>",
     "receivedBy": "Ricevuto da <strong>{paidBy}</strong> per <paidFor></paidFor>",
     "yourBalance": "Il tuo saldo:",
     "notInvolved": "Non sei coinvolto",
@@ -228,6 +229,15 @@
     "reimbursement": "Rimborso",
     "conversionRateState": {
       "refresh": "Aggiornare"
+    },
+    "multiPayer": "Più paganti",
+    "multiPayerToggle": "Dividi il pagamento tra più partecipanti",
+    "paidByCard": {
+      "title": "Pagato da",
+      "description": "Seleziona chi ha pagato questa spesa e come dividere il pagamento."
+    },
+    "PaidBySplitModeField": {
+      "label": "Modalità di divisione del pagante"
     }
   },
   "ExpenseDocumentsInput": {
@@ -339,7 +349,9 @@
     "paidForMin1": "La spesa deve essere pagata per almeno un partecipante.",
     "noZeroShares": "Tutti gli importi devono essere superiori a 0.",
     "amountSum": "La somma degli importi deve essere uguale all'importo della spesa.",
-    "percentageSum": "La somma delle percentuali deve essere uguale a 100."
+    "percentageSum": "La somma delle percentuali deve essere uguale a 100.",
+    "paidByAmountSum": "La somma degli importi dei paganti deve essere uguale all'importo della spesa.",
+    "paidByPercentageSum": "La somma delle percentuali dei paganti deve essere uguale a 100."
   },
   "Categories": {
     "search": "Cerca categoria...",

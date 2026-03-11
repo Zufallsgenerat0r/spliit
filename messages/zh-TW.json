@@ -42,6 +42,7 @@
   },
   "ExpenseCard": {
     "paidBy": "由 <strong>{paidBy}</strong> 支付 <paidFor></paidFor>。",
+    "paidByMultiple": "由 <paidByNames></paidByNames> 為 <paidFor></paidFor> 支付",
     "receivedBy": "由 <strong>{paidBy}</strong> 收取 <paidFor></paidFor>。",
     "yourBalance": "你的餘額："
   },
@@ -205,7 +206,16 @@
     "save": "儲存",
     "saving": "儲存中……",
     "cancel": "取消",
-    "reimbursement": "報銷"
+    "reimbursement": "報銷",
+    "multiPayer": "多位付款人",
+    "multiPayerToggle": "將付款分攤給多位參與者",
+    "paidByCard": {
+      "title": "付款人",
+      "description": "選擇誰支付了這筆費用以及如何分攤付款。"
+    },
+    "PaidBySplitModeField": {
+      "label": "付款人分攤模式"
+    }
   },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
@@ -316,7 +326,9 @@
     "paidForMin1": "這筆消費必須包含至少一個成員。",
     "noZeroShares": "份額需大於 0。",
     "amountSum": "金額總計必須等於消費金額。",
-    "percentageSum": "百分比加總必須等於 100。"
+    "percentageSum": "百分比加總必須等於 100。",
+    "paidByAmountSum": "付款人金額之和必須等於費用金額。",
+    "paidByPercentageSum": "付款人百分比之和必須等於100。"
   },
   "Categories": {
     "search": "搜尋類別……",

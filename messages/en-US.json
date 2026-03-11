@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Paid by <strong>{paidBy}</strong> for <paidFor></paidFor>",
+    "paidByMultiple": "Paid by <paidByNames></paidByNames> for <paidFor></paidFor>",
     "everyone": "everyone",
     "receivedBy": "Received by <strong>{paidBy}</strong> for <paidFor></paidFor>",
     "yourBalance": "Your balance:",
@@ -231,6 +232,15 @@
     "selectNone": "Select none",
     "selectAll": "Select all",
     "shares": "share(s)",
+    "multiPayer": "Multiple payers",
+    "multiPayerToggle": "Split the payment between multiple participants",
+    "paidByCard": {
+      "title": "Paid by",
+      "description": "Select who paid for this expense and how to split the payment."
+    },
+    "PaidBySplitModeField": {
+      "label": "Payer split mode"
+    },
     "advancedOptions": "Advanced splitting options…",
     "SplitModeField": {
       "label": "Split mode",
@@ -365,7 +375,9 @@
     "paidForMin1": "The expense must be paid for at least one participant.",
     "noZeroShares": "All shares must be higher than 0.",
     "amountSum": "Sum of amounts must equal the expense amount.",
-    "percentageSum": "Sum of percentages must equal 100."
+    "percentageSum": "Sum of percentages must equal 100.",
+    "paidByAmountSum": "Sum of payer amounts must equal the expense amount.",
+    "paidByPercentageSum": "Sum of payer percentages must equal 100."
   },
   "Categories": {
     "search": "Search category...",

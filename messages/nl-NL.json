@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Betaald door <strong>{paidBy}</strong> voor <paidFor></paidFor>",
+    "paidByMultiple": "Betaald door <paidByNames></paidByNames> voor <paidFor></paidFor>",
     "everyone": "iedereen",
     "receivedBy": "Ontvangen door <strong>{paidBy}</strong> voor <paidFor></paidFor>",
     "yourBalance": "Jouw balans:",
@@ -240,6 +241,15 @@
     "saving": "Aan het opslaan…",
     "cancel": "Annuleren",
     "reimbursement": "Terugbetaling",
+    "multiPayer": "Meerdere betalers",
+    "multiPayerToggle": "Verdeel de betaling over meerdere deelnemers",
+    "paidByCard": {
+      "title": "Betaald door",
+      "description": "Selecteer wie deze uitgave heeft betaald en hoe de betaling verdeeld moet worden."
+    },
+    "PaidBySplitModeField": {
+      "label": "Betalerverdeelmodus"
+    },
     "conversionUnavailable": "Om een andere munteenheid in te stellen voor een uitgave en bedragen om te rekenen, kies een standaard munteenheid voor de groep.",
     "originalAmountField": {
       "label": "Om te rekenen bedrag"
@@ -372,6 +382,8 @@
     "noZeroShares": "Een deel mag niet 0 zijn.",
     "amountSum": "Het totaalbedrag moet gelijk zijn aan het uitgavebedrag.",
     "percentageSum": "Het totaalpercentage moet gelijk zijn aan 100%.",
+    "paidByAmountSum": "De som van de bedragen van de betalers moet gelijk zijn aan het uitgavebedrag.",
+    "paidByPercentageSum": "De som van de percentages van de betalers moet gelijk zijn aan 100.",
     "ratePositive": "De koers moet groter dan nul zijn."
   },
   "Categories": {

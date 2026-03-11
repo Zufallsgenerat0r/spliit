@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Payé par <strong>{paidBy}</strong> pour <paidFor></paidFor>",
+    "paidByMultiple": "Payé par <paidByNames></paidByNames> pour <paidFor></paidFor>",
     "receivedBy": "Reçu par <strong>{paidBy}</strong> pour <paidFor></paidFor>",
     "yourBalance": "Votre solde :",
     "everyone": "tout le monde",
@@ -260,6 +261,15 @@
       "noDate": "Saisissez la date de la dépense pour obtenir un taux de change.",
       "dateMismatch": "Taux de change le {date}",
       "customRate": "Utilisation d’un taux personnalisé"
+    },
+    "multiPayer": "Plusieurs payeurs",
+    "multiPayerToggle": "Répartir le paiement entre plusieurs participants",
+    "paidByCard": {
+      "title": "Payé par",
+      "description": "Sélectionnez qui a payé cette dépense et comment répartir le paiement."
+    },
+    "PaidBySplitModeField": {
+      "label": "Mode de répartition des payeurs"
     }
   },
   "ExpenseDocumentsInput": {
@@ -372,7 +382,9 @@
     "noZeroShares": "Toutes les parts doivent être supérieures à 0.",
     "amountSum": "La somme des montants doit être égale au montant de la dépense.",
     "percentageSum": "La somme des pourcentages doit être égale à 100.",
-    "ratePositive": "Le taux de change doit être strictement supérieur à zéro."
+    "ratePositive": "Le taux de change doit être strictement supérieur à zéro.",
+    "paidByAmountSum": "La somme des montants des payeurs doit être égale au montant de la dépense.",
+    "paidByPercentageSum": "La somme des pourcentages des payeurs doit être égale à 100."
   },
   "Categories": {
     "search": "Rechercher une catégorie…",

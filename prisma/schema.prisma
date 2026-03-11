@@ -24,12 +24,13 @@ model Group {
 }
 
 model Participant {
-  id              String           @id
-  name            String
-  group           Group            @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId         String
-  expensesPaidBy  Expense[]
-  expensesPaidFor ExpensePaidFor[]
+  id                 String            @id
+  name               String
+  group              Group             @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId            String
+  expensesPaidBy     Expense[]
+  expensesPaidFor    ExpensePaidFor[]
+  expensesPaidByList ExpensePaidBy[]
 }
 
 model Category {
@@ -53,6 +54,8 @@ model Expense {
   paidBy           Participant       @relation(fields: [paidById], references: [id], onDelete: Cascade)
   paidById         String
   paidFor          ExpensePaidFor[]
+  paidByList       ExpensePaidBy[]
+  paidBySplitMode  SplitMode         @default(BY_AMOUNT)
   groupId          String
   isReimbursement  Boolean           @default(false)
   splitMode        SplitMode         @default(EVENLY)
@@ -112,6 +115,17 @@ model ExpensePaidFor {
   shares        Int         @default(1)
 
   @@id([expenseId, participantId])
+}
+
+model ExpensePaidBy {
+  expense       Expense     @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  expenseId     String
+  participantId String
+  shares        Int         @default(1)
+
+  @@id([expenseId, participantId])
+  @@index([participantId])
 }
 
 model Activity {
