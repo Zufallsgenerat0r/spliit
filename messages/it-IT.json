@@ -44,6 +44,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Pagato da <strong>{paidBy}</strong> per <paidFor></paidFor>",
+    "paidByMultiple": "Pagato da <paidByNames></paidByNames> per <paidFor></paidFor>",
     "receivedBy": "Ricevuto da <strong>{paidBy}</strong> per <paidFor></paidFor>",
     "yourBalance": "Il tuo saldo:",
     "notInvolved": "Non sei coinvolto",
@@ -267,6 +268,15 @@
       "dateMismatch": "Tassi a partire dalla data: {date}",
       "customRate": "Utilizzando il tasso personalizzato"
     },
+    "multiPayer": "Più paganti",
+    "multiPayerToggle": "Dividi il pagamento tra più partecipanti",
+    "paidByCard": {
+      "title": "Pagato da",
+      "description": "Seleziona chi ha pagato questa spesa e come dividere il pagamento."
+    },
+    "PaidBySplitModeField": {
+      "label": "Modalità di divisione del pagante"
+    },
     "conversionUnavailable": "Per impostare una valuta diversa per ogni spesa e convertire gli importi, seleziona una valuta non personalizzata per il gruppo.",
     "originalAmountField": {
       "label": "Importo da convertire",
@@ -468,6 +478,8 @@
     "noZeroShares": "Tutti gli importi devono essere superiori a 0.",
     "amountSum": "La somma degli importi deve essere uguale all'importo della spesa.",
     "percentageSum": "La somma delle percentuali deve essere uguale a 100.",
+    "paidByAmountSum": "La somma degli importi dei paganti deve essere uguale all'importo della spesa.",
+    "paidByPercentageSum": "La somma delle percentuali dei paganti deve essere uguale a 100.",
     "ratePositive": "Il tasso deve essere strettamente maggiore di zero.",
     "max200": "Inserisci al massimo 200 caratteri.",
     "max5000": "Inserisci al massimo 5.000 caratteri.",

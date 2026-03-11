@@ -3,7 +3,7 @@ import {
   getPublicBalances,
   getSuggestedReimbursements,
 } from './balances'
-import { makeExpense, alice, bob, charlie, dave } from './test-helpers'
+import { alice, bob, charlie, dave, makeExpense } from './test-helpers'
 
 describe('getBalances', () => {
   it('should return empty object for empty expenses', () => {

@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Pago por <strong>{paidBy}</strong> para <paidFor></paidFor>",
+    "paidByMultiple": "Pago por <paidByNames></paidByNames> para <paidFor></paidFor>",
     "everyone": "todos",
     "receivedBy": "Recebido por <strong>{paidBy}</strong> para <paidFor></paidFor>",
     "yourBalance": "O teu saldo:",
@@ -136,6 +137,15 @@
     }
   },
   "ExpenseForm": {
+    "multiPayer": "Múltiplos pagadores",
+    "multiPayerToggle": "Dividir o pagamento entre múltiplos participantes",
+    "paidByCard": {
+      "title": "Pago por",
+      "description": "Selecione quem pagou esta despesa e como dividir o pagamento."
+    },
+    "PaidBySplitModeField": {
+      "label": "Modo de divisão do pagador"
+    },
     "Income": {
       "TitleField": {
         "placeholder": "Restaurante de segunda à noite",
@@ -411,6 +421,8 @@
     "warningHelp": "Todos com a ligação do grupo poderão ver e editar despesas. Partilhe com cautela!"
   },
   "SchemaErrors": {
+    "paidByAmountSum": "A soma dos montantes dos pagadores deve ser igual ao montante da despesa.",
+    "paidByPercentageSum": "A soma das percentagens dos pagadores deve ser igual a 100.",
     "min1": "Digite pelo menos um caractere.",
     "min2": "Digite pelo menos dois caracteres.",
     "max5": "Digite no máximo cinco caracteres.",

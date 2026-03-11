@@ -44,6 +44,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Gezahlt von <strong>{paidBy}</strong> für <paidFor></paidFor>",
+    "paidByMultiple": "Bezahlt von <paidByNames></paidByNames> für <paidFor></paidFor>",
     "receivedBy": "Empfangen von <strong>{paidBy}</strong> für <paidFor></paidFor>",
     "yourBalance": "Dein Saldo:",
     "everyone": "jeder",
@@ -304,6 +305,15 @@
       "useCustom": "Benutze eigenen Wechselkurs",
       "label": "Wechselkurs",
       "useApi": "Benutze Wechselkurse von Frankfurter"
+    },
+    "multiPayer": "Mehrere Zahler",
+    "multiPayerToggle": "Zahlung auf mehrere Teilnehmer aufteilen",
+    "paidByCard": {
+      "title": "Bezahlt von",
+      "description": "Wähle aus, wer diese Ausgabe bezahlt hat und wie die Zahlung aufgeteilt werden soll."
+    },
+    "PaidBySplitModeField": {
+      "label": "Zahlungsaufteilungsmodus"
     }
   },
   "ExpenseDocumentsInput": {
@@ -498,6 +508,8 @@
     "amountSum": "Die Beträge summieren sich zu {sum}, {difference} {direction, select, over {mehr} other {weniger}} als der Ausgabenbetrag ({amount}).",
     "percentageSum": "Die Prozentsätze ergeben zusammen {sum} %, {difference} % {direction, select, over {zu viel} other {zu wenig}}.",
     "ratePositive": "Der Wechselkurs muss unbedingt größer als Null sein.",
+    "paidByAmountSum": "Die Summe der Zahlerbeträge muss dem Ausgabenbetrag entsprechen.",
+    "paidByPercentageSum": "Die Summe der Zahlerprozentsätze muss 100 ergeben.",
     "max200": "Gib höchstens 200 Zeichen ein.",
     "max5000": "Gib höchstens 5.000 Zeichen ein.",
     "max10000": "Gib höchstens 10.000 Zeichen ein."

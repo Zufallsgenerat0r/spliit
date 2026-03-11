@@ -44,6 +44,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Opłacone przez <strong>{paidBy}</strong> dla <paidFor></paidFor>",
+    "paidByMultiple": "Zapłacone przez <paidByNames></paidByNames> za <paidFor></paidFor>",
     "receivedBy": "Otrzymane przez <strong>{paidBy}</strong> od <paidFor></paidFor>",
     "yourBalance": "Twjoje saldo:",
     "everyone": "wszyscy",
@@ -249,6 +250,15 @@
     "saving": "Zapisywanie…",
     "cancel": "Anuluj",
     "reimbursement": "Zwrot środków",
+    "multiPayer": "Wielu płatników",
+    "multiPayerToggle": "Podziel płatność między wielu uczestników",
+    "paidByCard": {
+      "title": "Zapłacone przez",
+      "description": "Wybierz, kto zapłacił za ten wydatek i jak podzielić płatność."
+    },
+    "PaidBySplitModeField": {
+      "label": "Tryb podziału płatnika"
+    },
     "originalAmountField": {
       "label": "Kwota do przeliczenia",
       "repaymentLabel": "Kwota do przelania"
@@ -426,7 +436,9 @@
     "paidForMin1": "Wydatek musi zostać opłacony za co najmniej jednego uczestnika.",
     "noZeroShares": "Wszystkie udziały muszą być większe niż 0.",
     "amountSum": "Suma udziałów musi być równa wydatkowi.",
-    "percentageSum": "Suma procentów musi być równa 100."
+    "percentageSum": "Suma procentów musi być równa 100.",
+    "paidByAmountSum": "Suma kwot płatników musi być równa kwocie wydatku.",
+    "paidByPercentageSum": "Suma procentów płatników musi wynosić 100."
   },
   "Categories": {
     "search": "Szukaj kategorii…",

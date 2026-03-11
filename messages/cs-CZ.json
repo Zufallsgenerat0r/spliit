@@ -44,6 +44,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Zaplatil/a <strong>{paidBy}</strong> za <paidFor></paidFor>",
+    "paidByMultiple": "Zaplatil(a) <paidByNames></paidByNames> za <paidFor></paidFor>",
     "receivedBy": "Obdržel/a <strong>{paidBy}</strong> od <paidFor></paidFor>",
     "yourBalance": "Váš zůstatek:",
     "everyone": "všichni",
@@ -251,6 +252,15 @@
     "saving": "Ukládání…",
     "cancel": "Zrušit",
     "reimbursement": "Proplacení",
+    "multiPayer": "Více plátců",
+    "multiPayerToggle": "Rozdělit platbu mezi více účastníků",
+    "paidByCard": {
+      "title": "Zaplaceno",
+      "description": "Vyberte, kdo za tento výdaj zaplatil a jak rozdělit platbu."
+    },
+    "PaidBySplitModeField": {
+      "label": "Režim rozdělení plátce"
+    },
     "originalAmountField": {
       "repaymentLabel": "Částka k převodu",
       "label": "Částka k přepočtu",
@@ -464,6 +474,8 @@
     "noZeroShares": "Všechny podíly musí být větší než 0.",
     "amountSum": "Součet částek je {sum}, což je o {difference} {direction, select, over {více} other {méně}} než částka výdaje ({amount}).",
     "percentageSum": "Součet procent je {sum} %, což je o {difference} % {direction, select, over {více} other {méně}} než 100 %.",
+    "paidByAmountSum": "Součet částek plátců musí odpovídat celkové částce výdaje.",
+    "paidByPercentageSum": "Součet procent plátců musí být roven 100.",
     "ratePositive": "Tato hodnota musí být jednoznačně větší než nula."
   },
   "Categories": {

@@ -44,6 +44,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Payé par <strong>{paidBy}</strong> pour <paidFor></paidFor>",
+    "paidByMultiple": "Payé par <paidByNames></paidByNames> pour <paidFor></paidFor>",
     "receivedBy": "Reçu par <strong>{paidBy}</strong> pour <paidFor></paidFor>",
     "yourBalance": "Votre solde :",
     "everyone": "tout le monde",
@@ -277,6 +278,15 @@
       "noDate": "Saisissez la date de la dépense pour obtenir un taux de change.",
       "dateMismatch": "Taux de change le {date}",
       "customRate": "Utilisation d’un taux personnalisé"
+    },
+    "multiPayer": "Plusieurs payeurs",
+    "multiPayerToggle": "Répartir le paiement entre plusieurs participants",
+    "paidByCard": {
+      "title": "Payé par",
+      "description": "Sélectionnez qui a payé cette dépense et comment répartir le paiement."
+    },
+    "PaidBySplitModeField": {
+      "label": "Mode de répartition des payeurs"
     }
   },
   "ExpenseDocumentsInput": {
@@ -469,6 +479,8 @@
     "amountSum": "La somme des montants est de {sum}, soit {difference} de {direction, select, over {plus} other {moins}} que le montant de la dépense ({amount}).",
     "percentageSum": "La somme des pourcentages est de {sum} %, soit {difference} % de {direction, select, over {plus} other {moins}} que 100 %.",
     "ratePositive": "Le taux de change doit être strictement supérieur à zéro.",
+    "paidByAmountSum": "La somme des montants des payeurs doit être égale au montant de la dépense.",
+    "paidByPercentageSum": "La somme des pourcentages des payeurs doit être égale à 100.",
     "max200": "Entrez au maximum 200 caractères.",
     "max5000": "Entrez au maximum 5 000 caractères.",
     "max10000": "Saisissez au maximum 10 000 caractères."

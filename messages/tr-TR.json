@@ -43,6 +43,7 @@
   },
   "ExpenseCard": {
     "paidBy": "<strong>{paidBy}</strong> tarafından ödendi, <paidFor></paidFor> için",
+    "paidByMultiple": "<paidByNames></paidByNames> tarafından <paidFor></paidFor> için ödendi",
     "receivedBy": "<strong>{paidBy}</strong> tarafından alındı, <paidFor></paidFor> için",
     "yourBalance": "Bakiyeniz:",
     "everyone": "herkes",
@@ -232,6 +233,15 @@
     "saving": "Kaydediliyor…",
     "cancel": "İptal",
     "reimbursement": "Geri ödeme",
+    "multiPayer": "Birden fazla ödeyen",
+    "multiPayerToggle": "Ödemeyi birden fazla katılımcı arasında böl",
+    "paidByCard": {
+      "title": "Ödeyen",
+      "description": "Bu harcamayı kimin ödediğini ve ödemenin nasıl bölüneceğini seçin."
+    },
+    "PaidBySplitModeField": {
+      "label": "Ödeyen bölme modu"
+    },
     "conversionUnavailable": "Her bir masraf için farklı bir para birimi belirlemek ve tutarları dönüştürmek için, grup için özel olmayan bir para birimi seçin.",
     "originalAmountField": {
       "label": "Dönüştürülecek miktar"
@@ -366,6 +376,8 @@
     "noZeroShares": "Tüm paylar 0'dan büyük olmalıdır.",
     "amountSum": "Tutarların toplamı masraf tutarına eşit olmalıdır.",
     "percentageSum": "Yüzdelerin toplamı 100 olmalıdır.",
+    "paidByAmountSum": "Ödeyenlerin tutarlarının toplamı harcama tutarına eşit olmalıdır.",
+    "paidByPercentageSum": "Ödeyenlerin yüzdelerinin toplamı 100'e eşit olmalıdır.",
     "ratePositive": "Kur sıfırdan büyük olmalı."
   },
   "Categories": {

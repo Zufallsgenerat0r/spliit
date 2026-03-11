@@ -44,6 +44,7 @@
   },
   "ExpenseCard": {
     "paidBy": "Pagada per <strong>{paidBy}</strong> per a <paidFor></paidFor>",
+    "paidByMultiple": "Pagat per <paidByNames></paidByNames> per a <paidFor></paidFor>",
     "receivedBy": "Rebuda per <strong>{paidBy}</strong> per a <paidFor></paidFor>",
     "yourBalance": "El teu balanç:",
     "everyone": "tothom",
@@ -263,6 +264,15 @@
       "dateMismatch": "Taxes per a la data: {date}",
       "refresh": "Actualitza",
       "customRate": "S'usa una taxa personalitzada"
+    },
+    "multiPayer": "Múltiples pagadors",
+    "multiPayerToggle": "Divideix el pagament entre múltiples participants",
+    "paidByCard": {
+      "title": "Pagat per",
+      "description": "Selecciona qui ha pagat aquesta despesa i com dividir el pagament."
+    },
+    "PaidBySplitModeField": {
+      "label": "Mode de divisió del pagador"
     }
   },
   "ExpenseDocumentsInput": {
@@ -426,7 +436,9 @@
     "noZeroShares": "Totes les participacions han de ser superiors a 0.",
     "amountSum": "La suma dels imports ha de ser igual a l'import de la despesa.",
     "percentageSum": "La suma dels percentatges ha de ser igual a 100.",
-    "ratePositive": "La taxa ha de ser estrictament major que zero."
+    "ratePositive": "La taxa ha de ser estrictament major que zero.",
+    "paidByAmountSum": "La suma dels imports dels pagadors ha de ser igual a l'import de la despesa.",
+    "paidByPercentageSum": "La suma dels percentatges dels pagadors ha de ser igual a 100."
   },
   "Categories": {
     "search": "Cerca una categoria...",
