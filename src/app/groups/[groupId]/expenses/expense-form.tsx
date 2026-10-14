@@ -244,13 +244,19 @@ export function ExpenseForm({
           })),
           splitMode: expense.splitMode,
           isMultiPayer: ((expense as any).paidByList?.length ?? 0) > 1,
-          paidByList: ((expense as any).paidByList ?? []).map((p: any) => ({
-            participant: p.participantId,
-            shares:
-              (expense as any).paidBySplitMode === 'BY_AMOUNT'
-                ? amountAsDecimal(p.shares, groupCurrency)
-                : p.shares / 100,
-          })),
+          // A single-payer expense keeps its one paidByList row in sync with
+          // paidById; loading it would only feed the inactive field into
+          // validation (an income's negative share fails noZeroShares).
+          paidByList:
+            ((expense as any).paidByList?.length ?? 0) > 1
+              ? (expense as any).paidByList.map((p: any) => ({
+                  participant: p.participantId,
+                  shares:
+                    (expense as any).paidBySplitMode === 'BY_AMOUNT'
+                      ? amountAsDecimal(p.shares, groupCurrency)
+                      : (p.shares / 100).toString(), // Strings are scaled back by the schema, like paidFor
+                }))
+              : [],
           paidBySplitMode: (expense as any).paidBySplitMode ?? 'BY_AMOUNT',
           saveDefaultSplittingOptions: false,
           isReimbursement: expense.isReimbursement,

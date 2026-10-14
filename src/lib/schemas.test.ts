@@ -60,3 +60,44 @@ describe('expenseFormSchema, split by amount', () => {
     ])
   })
 })
+
+describe('expenseFormSchema, multiple payers', () => {
+  function multiPayerExpense(
+    amount: string,
+    paidBySplitMode: string,
+    shares: string[],
+  ) {
+    return {
+      ...byAmountExpense(amount, [amount]),
+      isMultiPayer: true,
+      paidBySplitMode,
+      paidByList: shares.map((shares, i) => ({ participant: `p${i}`, shares })),
+    }
+  }
+
+  it('scales reopened percentages like paidFor', () => {
+    const result = expenseFormSchema.safeParse(
+      multiPayerExpense('100', 'BY_PERCENTAGE', ['50', '50']),
+    )
+    expect(result.success).toBe(true)
+    expect(result.data?.paidByList.map(({ shares }) => shares)).toEqual([
+      5000, 5000,
+    ])
+  })
+
+  it('rejects percentages that do not add up to 100', () => {
+    expect(
+      issueMessages(multiPayerExpense('100', 'BY_PERCENTAGE', ['50', '40'])),
+    ).toEqual(['paidByPercentageSum'])
+  })
+
+  it('accepts a single-payer income without paidByList rows', () => {
+    expect(
+      issueMessages({
+        ...byAmountExpense('-20', ['1']),
+        splitMode: 'EVENLY',
+        paidByList: [],
+      }),
+    ).toEqual([])
+  })
+})
