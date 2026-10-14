@@ -37,8 +37,7 @@ function Participants({
     )
 
   const paidByList = (expense as any).paidByList as
-    | { participant: { id: string; name: string }; shares: number }[]
-    | undefined
+    { participant: { id: string; name: string }; shares: number }[] | undefined
   const isMultiPayer = paidByList && paidByList.length > 1
 
   if (isMultiPayer) {
