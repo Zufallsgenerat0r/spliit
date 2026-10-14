@@ -1026,7 +1026,8 @@ export function ExpenseForm({
                                   const currentPayer = form.getValues('paidBy')
                                   if (
                                     currentPayer &&
-                                    form.getValues('paidByList').length === 0
+                                    (form.getValues('paidByList') ?? [])
+                                      .length === 0
                                   ) {
                                     form.setValue('paidByList', [
                                       {
@@ -1121,7 +1122,7 @@ export function ExpenseForm({
                   type="button"
                   className="-my-2 -mx-4"
                   onClick={() => {
-                    const paidByList = form.getValues().paidByList
+                    const paidByList = form.getValues().paidByList ?? []
                     const allSelected =
                       paidByList.length === group.participants.length
                     const newPaidByList = allSelected
@@ -1139,7 +1140,7 @@ export function ExpenseForm({
                     })
                   }}
                 >
-                  {form.getValues().paidByList.length ===
+                  {(form.getValues().paidByList ?? []).length ===
                   group.participants.length ? (
                     <>{t('selectNone')}</>
                   ) : (
@@ -1179,7 +1180,7 @@ export function ExpenseForm({
                                         ? form.setValue(
                                             'paidByList',
                                             [
-                                              ...field.value,
+                                              ...(field.value ?? []),
                                               {
                                                 participant: id,
                                                 shares: 1,
@@ -1243,7 +1244,7 @@ export function ExpenseForm({
                                         }
                                         onChange={(event) => {
                                           field.onChange(
-                                            field.value.map((p) =>
+                                            (field.value ?? []).map((p) =>
                                               p.participant === id
                                                 ? {
                                                     participant: id,
@@ -1271,7 +1272,8 @@ export function ExpenseForm({
                                         }
                                       />
                                       {['BY_SHARES', 'BY_PERCENTAGE'].includes(
-                                        form.getValues().paidBySplitMode,
+                                        form.getValues().paidBySplitMode ??
+                                          'BY_AMOUNT',
                                       ) && (
                                         <span
                                           className={cn('text-sm', {
