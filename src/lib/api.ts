@@ -389,10 +389,16 @@ export async function updateExpense(
               },
               data: { shares: p.shares },
             })),
-          deleteMany: existingPaidByList.filter(
-            (ep: any) =>
-              !newPaidByList.some((p) => p.participantId === ep.participantId),
-          ),
+          // Only the key: the rows carry their included participant, which
+          // is not a valid filter field.
+          deleteMany: existingPaidByList
+            .filter(
+              (ep: any) =>
+                !newPaidByList.some(
+                  (p) => p.participantId === ep.participantId,
+                ),
+            )
+            .map((ep: any) => ({ participantId: ep.participantId })),
         }
       })(),
       paidFor: {

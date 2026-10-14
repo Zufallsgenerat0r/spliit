@@ -278,6 +278,35 @@ describe('updateExpense', () => {
     ).toBe('participant-2')
   })
 
+  it('deletes removed payers by key only', async () => {
+    jest.mocked(prisma.group.findUnique).mockResolvedValue({
+      id: 'group-1',
+      participants: [{ id: 'participant-1' }, { id: 'participant-2' }],
+    } as never)
+    jest.mocked(prisma.expense.findUnique).mockResolvedValue({
+      ...existingExpense,
+      paidByList: [
+        {
+          expenseId: 'expense-1',
+          participantId: 'participant-1',
+          shares: 1,
+          participant: { id: 'participant-1', name: 'One' },
+        },
+      ],
+    } as never)
+    await updateExpense(
+      'group-1',
+      'expense-1',
+      formValues({
+        isMultiPayer: true,
+        paidByList: [{ participant: 'participant-2', shares: 1000 }],
+      }),
+    )
+    expect(
+      jest.mocked(prisma.expense.update).mock.calls[0][0].data.paidByList,
+    ).toMatchObject({ deleteMany: [{ participantId: 'participant-1' }] })
+  })
+
   it('reschedules the next occurrence from the new expense date', async () => {
     const link = await linkUpdate(
       formValues({ expenseDate: new Date(Date.UTC(2025, 0, 31)) }),
