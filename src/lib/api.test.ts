@@ -40,6 +40,7 @@ describe('getGroupExpenses', () => {
       paidFor: [
         { expenseId: 'expense-1', participantId: 'participant-1', shares: 1 },
       ],
+      paidByList: [],
       documents: [document],
     }
 
@@ -119,6 +120,7 @@ describe('createRecurringExpenses', () => {
       category: null,
       paidBy: { id: 'participant-1' },
       paidFor: [],
+      paidByList: [],
       documents: [],
     }
     const createExpense = jest.fn(async ({ data }) => ({
@@ -210,6 +212,7 @@ describe('updateExpense', () => {
     expenseDate: new Date(Date.UTC(2025, 0, 15)),
     recurrenceRule: 'MONTHLY',
     paidFor: [{ expenseId: 'expense-1', participantId: 'participant-1' }],
+    paidByList: [],
     documents: [],
     recurringExpenseLink: {
       id: 'link-1',
@@ -230,6 +233,9 @@ describe('updateExpense', () => {
       paidBy: 'participant-1',
       paidFor: [{ participant: 'participant-1', shares: 1 }],
       splitMode: 'EVENLY',
+      isMultiPayer: false,
+      paidByList: [],
+      paidBySplitMode: 'BY_AMOUNT',
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'MONTHLY',
