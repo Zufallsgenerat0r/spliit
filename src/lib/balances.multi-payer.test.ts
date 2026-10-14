@@ -567,3 +567,64 @@ describe('getSuggestedReimbursements', () => {
     expect(reimbursements).toEqual([])
   })
 })
+
+describe('getBalances payer-side apportionment', () => {
+  const sumOf = (balances: ReturnType<typeof getBalances>, key: 'paid') =>
+    Object.values(balances).reduce((sum, b) => sum + b[key], 0)
+
+  it('conserves a single minor unit split evenly across three payers', () => {
+    const balances = getBalances([
+      makeExpense({
+        amount: 1,
+        paidBy: alice,
+        paidFor: [{ participant: dave, shares: 1 }],
+        paidByList: [
+          { participant: alice, shares: 1 },
+          { participant: bob, shares: 1 },
+          { participant: charlie, shares: 1 },
+        ],
+        paidBySplitMode: 'EVENLY',
+      }),
+    ])
+    expect(sumOf(balances, 'paid')).toBe(1)
+    for (const { paid } of Object.values(balances))
+      expect(Number.isInteger(paid)).toBe(true)
+  })
+
+  it('conserves a negative amount (income) across payers', () => {
+    const balances = getBalances([
+      makeExpense({
+        amount: -1001,
+        paidBy: alice,
+        paidFor: [
+          { participant: alice, shares: 1 },
+          { participant: bob, shares: 1 },
+        ],
+        paidByList: [
+          { participant: alice, shares: 1 },
+          { participant: bob, shares: 1 },
+        ],
+        paidBySplitMode: 'EVENLY',
+      }),
+    ])
+    expect(sumOf(balances, 'paid')).toBe(-1001)
+    expect(balances.alice.total + balances.bob.total).toBe(0)
+  })
+
+  it('does not depend on the order of the paidByList rows', () => {
+    const paidByList = [
+      { participant: alice, shares: 1 },
+      { participant: bob, shares: 1 },
+      { participant: charlie, shares: 1 },
+    ]
+    const base = {
+      amount: 1000,
+      paidBy: alice,
+      paidFor: [{ participant: dave, shares: 1 }],
+      paidBySplitMode: 'EVENLY' as const,
+    }
+    const forward = makeExpense({ ...base, paidByList })
+    const reversed = { ...forward, paidByList: [...paidByList].reverse() }
+    expect(getBalances([reversed])).toEqual(getBalances([forward]))
+  })
+})
