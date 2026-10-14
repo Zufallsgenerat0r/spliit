@@ -1,4 +1,4 @@
-import type { RecurrenceRule } from '@/generated/prisma/client'
+import type { RecurrenceRule, SplitMode } from '@/generated/prisma/client'
 import { getGroupExpenses } from '@/lib/api'
 import { getExpenseShares, getParticipantShare, ShareInput } from '@/lib/shares'
 
@@ -36,46 +36,50 @@ export function getTotalActiveUserPaidFor(
   activeUserId: string | null,
   expenses: NonNullable<Awaited<ReturnType<typeof getGroupExpenses>>>,
 ): number {
-  return expenses.reduce((total, expense) => {
-    if (expense.isReimbursement) return total
+  return expenses.reduce(
+    (total, expense) =>
+      expense.isReimbursement
+        ? total
+        : total + calculatePaidByShare(activeUserId, expense),
+    0,
+  )
+}
 
-    const paidByList = (expense as any).paidByList
-    if (paidByList && paidByList.length > 0) {
-      return total + calculatePaidByShare(activeUserId, expense as any)
-    }
+type PayableExpense = {
+  id?: string | null
+  amount: number
+  paidBy?: { id: string }
+  paidByList?: { participant: { id: string }; shares: number }[]
+  paidBySplitMode?: SplitMode | null
+}
 
-    // Legacy fallback: single payer
-    return expense.paidBy.id === activeUserId ? total + expense.amount : total
-  }, 0)
+/**
+ * What each payer paid towards an expense, in whole minor units, adding up to
+ * exactly `expense.amount`. Uses the same apportionment as the paidFor side
+ * (`getExpenseShares`), so totals and stats agree with the balances tab.
+ * Expenses without paidByList rows were paid in full by `paidBy`.
+ */
+export function getPaidAmounts(expense: PayableExpense): Map<string, number> {
+  const paidByList = expense.paidByList ?? []
+  if (paidByList.length === 0)
+    return new Map(expense.paidBy ? [[expense.paidBy.id, expense.amount]] : [])
+  return getExpenseShares({
+    id: expense.id,
+    amount: expense.amount,
+    splitMode: expense.paidBySplitMode ?? 'BY_AMOUNT',
+    paidFor: paidByList.map(({ participant, shares }) => ({
+      participantId: participant.id,
+      shares,
+    })),
+  })
 }
 
 export function calculatePaidByShare(
   participantId: string | null,
-  expense: {
-    amount: number
-    paidByList: { participant: { id: string }; shares: number }[]
-    paidBySplitMode: string
-  },
+  expense: PayableExpense,
 ): number {
-  const paidByList = expense.paidByList
-  const userPaidBy = paidByList.find((p) => p.participant.id === participantId)
-
-  if (!userPaidBy) return 0
-
-  const totalShares = paidByList.reduce((sum, p) => sum + p.shares, 0)
-
-  switch (expense.paidBySplitMode) {
-    case 'EVENLY':
-      return expense.amount / paidByList.length
-    case 'BY_AMOUNT':
-      return userPaidBy.shares
-    case 'BY_PERCENTAGE':
-      return (expense.amount * userPaidBy.shares) / totalShares
-    case 'BY_SHARES':
-      return (expense.amount * userPaidBy.shares) / totalShares
-    default:
-      return 0
-  }
+  if (participantId === null) return 0
+  return getPaidAmounts(expense).get(participantId) ?? 0
 }
 
 type Expense = NonNullable<Awaited<ReturnType<typeof getGroupExpenses>>>[number]
@@ -240,10 +244,12 @@ export function getSpendingByParticipant(
   for (const expense of expenses) {
     if (expense.isReimbursement) continue
 
-    const payer = totals.get(expense.paidBy.id)
-    if (payer) {
-      payer.paid += expense.amount
-      payer.paidCount += 1
+    for (const [payerId, paidAmount] of getPaidAmounts(expense)) {
+      const payer = totals.get(payerId)
+      if (payer) {
+        payer.paid += paidAmount
+        payer.paidCount += 1
+      }
     }
 
     // Split the expense once and hand out the shares, rather than re-deriving

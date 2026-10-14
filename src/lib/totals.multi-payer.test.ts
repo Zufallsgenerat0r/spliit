@@ -307,14 +307,14 @@ describe('calculatePaidByShare', () => {
     ).toBe(4000)
   })
 
-  it('returns 0 for unknown split mode', () => {
-    expect(
+  it('throws for unknown split mode, like the paidFor side', () => {
+    expect(() =>
       calculatePaidByShare(alice.id, {
         amount: 3000,
         paidByList: [{ participant: alice, shares: 3000 }],
         paidBySplitMode: 'UNKNOWN' as any,
       }),
-    ).toBe(0)
+    ).toThrow()
   })
 })
 
@@ -466,7 +466,7 @@ describe('getTotalActiveUserShare', () => {
     expect(getTotalActiveUserShare(bob.id, expenses)).toBe(0)
   })
 
-  it('rounds to 2 decimal places', () => {
+  it('apportions whole minor units', () => {
     const expenses = [
       makeExpense({
         amount: 1000,
@@ -479,7 +479,11 @@ describe('getTotalActiveUserShare', () => {
         splitMode: 'EVENLY',
       }),
     ]
-    // 1000/3 = 333.333... → rounded to 333.33
-    expect(getTotalActiveUserShare(alice.id, expenses)).toBe(333.33)
+    // 1000/3 = 333.333... → whole minor units that add up to 1000
+    const shares = [alice, bob, charlie].map(({ id }) =>
+      getTotalActiveUserShare(id, expenses),
+    )
+    expect(shares.every((share) => share === 333 || share === 334)).toBe(true)
+    expect(shares.reduce((sum, share) => sum + share, 0)).toBe(1000)
   })
 })
