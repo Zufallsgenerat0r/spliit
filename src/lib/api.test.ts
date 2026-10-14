@@ -257,6 +257,27 @@ describe('updateExpense', () => {
 
   beforeEach(() => jest.clearAllMocks())
 
+  it('keeps paidById among the payers of a multi-payer expense', async () => {
+    jest.mocked(prisma.group.findUnique).mockResolvedValue({
+      id: 'group-1',
+      participants: [{ id: 'participant-1' }, { id: 'participant-2' }],
+    } as never)
+    jest
+      .mocked(prisma.expense.findUnique)
+      .mockResolvedValue(existingExpense as never)
+    await updateExpense(
+      'group-1',
+      'expense-1',
+      formValues({
+        isMultiPayer: true,
+        paidByList: [{ participant: 'participant-2', shares: 1000 }],
+      }),
+    )
+    expect(
+      jest.mocked(prisma.expense.update).mock.calls[0][0].data.paidById,
+    ).toBe('participant-2')
+  })
+
   it('reschedules the next occurrence from the new expense date', async () => {
     const link = await linkUpdate(
       formValues({ expenseDate: new Date(Date.UTC(2025, 0, 31)) }),

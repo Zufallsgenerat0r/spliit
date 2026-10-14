@@ -33,6 +33,18 @@ export async function createGroup(groupFormValues: GroupFormValues) {
   })
 }
 
+/**
+ * `paidById` must name one of the payers: a multi-payer expense left with a
+ * single payer reopens in single-payer mode, which falls back to `paidById`.
+ */
+function getPrimaryPayer(expenseFormValues: ExpenseFormValues): string {
+  const { isMultiPayer, paidBy, paidByList } = expenseFormValues
+  if (!isMultiPayer || paidByList.length === 0) return paidBy
+  return paidByList.some(({ participant }) => participant === paidBy)
+    ? paidBy
+    : paidByList[0].participant
+}
+
 export async function createExpense(
   expenseFormValues: ExpenseFormValues,
   groupId: string,
@@ -101,7 +113,7 @@ export async function createExpense(
       originalCurrency: expenseFormValues.originalCurrency,
       conversionRate: expenseFormValues.conversionRate,
       title: expenseFormValues.title,
-      paidById: expenseFormValues.paidBy,
+      paidById: getPrimaryPayer(expenseFormValues),
       splitMode: expenseFormValues.splitMode,
       paidBySplitMode:
         expenseFormValues.isMultiPayer &&
@@ -332,7 +344,7 @@ export async function updateExpense(
       conversionRate: expenseFormValues.conversionRate,
       title: expenseFormValues.title,
       categoryId: expenseFormValues.category,
-      paidById: expenseFormValues.paidBy,
+      paidById: getPrimaryPayer(expenseFormValues),
       splitMode: expenseFormValues.splitMode,
       paidBySplitMode:
         expenseFormValues.isMultiPayer &&
